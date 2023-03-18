@@ -1,0 +1,33 @@
+# 이 파일의 내용을 `config.toml`에 추가하여 "빠른 빌드" 구성을 활성화합니다. 아래의 참고 사항을 읽으십시오.
+
+# 참고: 최대 성능을 위해 야간 컴파일러를 사용하여 빌드하십시오.
+# Rust stable을 사용하는 경우 아래의 "-Zshare-generics=y"를 제거합니다.
+
+[target.x86_64-unknown-linux-gnu]
+linker = "clang"
+rustflags = ["-Clink-arg=-fuse-ld=lld", "-Zshare-generics=y"]
+
+# 참고: Mac에 [Mach-O LLD 포트](https://lld.llvm.org/MachO/index.html)를 설치해야 합니다. "brew" 패키지 관리자와 함께 lld를 포함하는 llvm을 설치하면 쉽게 이 작업을 수행할 수 있습니다.
+# `brew install llvm`
+[target.x86_64-apple-darwin]
+rustflags = [
+    "-C",
+    "link-arg=-fuse-ld=/usr/local/opt/llvm/bin/ld64.lld",
+    # "-Zshare-generics=y",
+]
+
+[target.aarch64-apple-darwin]
+rustflags = [
+    "-C",
+    "link-arg=-fuse-ld=/opt/homebrew/opt/llvm/bin/ld64.lld",
+    # "-Zshare-generics=y",
+]
+
+[target.x86_64-pc-windows-msvc]
+linker = "rust-lld.exe"
+rustflags = ["-Zshare-generics=n"]
+
+# 선택 사항: 다음 주석을 제거하면 컴파일 시간이 향상되지만 디버그 정보의 양이 '줄 번호 테이블만'으로 줄어듭니다.
+# 대부분의 경우 이득은 미미하지만 Macos를 사용하고 컴파일 시간이 느린 경우 상당한 이득을 볼 수 있습니다.
+[profile.dev]
+debug = 1
