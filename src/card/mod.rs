@@ -29,7 +29,7 @@ pub struct CardPlugin;
 
 impl Plugin for CardPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup);
+        app.add_startup_system(setup).add_system(mouse_button_input);
     }
 }
 
@@ -49,30 +49,39 @@ fn convert_json_to_card(
     let mut cards = Vec::new();
 
     for card in card_info {
-        cards.push(CardBundle {
-            card: Card {
-                card_id: card.card_id,
-                name: card.name,
-                desc: card.desc,
-            },
-            card_type: CardType::Character,
-            attack: Attack(card.atk),
-            shield: Shield(card.sd),
-            health: Health(card.hp),
-            heal: Heal(card.heal),
-            speed: Speed(card.spd),
-            cooldown: Cooldown(1),
-            class: Class::NONE,
-            sprite: SpriteBundle {
-                texture: asset_server.load(card.sprite),
-                transform: Transform::from_xyz(100.0, 100.0, 0.0),
-                visibility: Visibility::Visible,
-                ..default()
-            },
-            location: Location::NONE,
-            camp_type: CampType::NONE,
-        });
+        cards.push(
+            (CardBundle {
+                card: Card {
+                    card_id: card.card_id,
+                    name: card.name,
+                    desc: card.desc,
+                },
+                card_type: CardType::Character,
+                attack: Attack(card.atk),
+                shield: Shield(card.sd),
+                health: Health(card.hp),
+                heal: Heal(card.heal),
+                speed: Speed(card.spd),
+                cooldown: Cooldown(1),
+                class: Class::NONE,
+                sprite: SpriteBundle {
+                    texture: asset_server.load(card.sprite),
+                    transform: Transform::from_xyz(100.0, 100.0, 0.0),
+                    visibility: Visibility::Visible,
+                    ..default()
+                },
+                location: Location::NONE,
+                camp_type: CampType::NONE,
+                behavior_type: BehaviorType::NONE,
+            }),
+        );
     }
 
     cards
+}
+
+fn mouse_button_input(buttons: Res<Input<MouseButton>>, &query: Query<&CardBundle>) {
+    if buttons.just_pressed(MouseButton::Left) {
+        println!("asd");
+    }
 }

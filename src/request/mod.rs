@@ -1,7 +1,3 @@
-pub struct Client {
-    url: String,
-}
-
 pub fn get<T>(url: &str) -> T
 where
     T: serde::de::DeserializeOwned,

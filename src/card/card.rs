@@ -32,6 +32,16 @@ pub struct Speed(pub u32);
 #[derive(Component)]
 pub struct Cooldown(pub u32);
 
+#[derive(Component)]
+pub enum BehaviorType {
+    NONE,
+    Attack,
+    Heal,
+    Shield,
+    Buff,
+    Debuff,
+}
+
 #[derive(Component, PartialEq)]
 pub enum Class {
     NONE,
@@ -75,6 +85,7 @@ pub struct CardBundle {
     pub speed: Speed,
     pub cooldown: Cooldown,
     pub class: Class,
+    pub behavior_type: BehaviorType,
     pub sprite: SpriteBundle,
     pub location: Location,
     pub camp_type: CampType,
