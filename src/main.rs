@@ -45,7 +45,10 @@ fn main() {
 }
 
 fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle {
+        transform: Transform::from_translation(Vec3::new(360., 540., 1.)),
+        ..default()
+    });
 
     let button_entity = commands
         .spawn(NodeBundle {

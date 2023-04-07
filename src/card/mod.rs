@@ -66,7 +66,7 @@ fn convert_json_to_card(
                 class: Class::NONE,
                 sprite: SpriteBundle {
                     texture: asset_server.load(card.sprite),
-                    transform: Transform::from_xyz(100.0, 100.0, 0.0),
+                    transform: Transform::from_xyz(0., 0., 0.),
                     visibility: Visibility::Visible,
                     ..default()
                 },
@@ -80,8 +80,11 @@ fn convert_json_to_card(
     cards
 }
 
-fn mouse_button_input(buttons: Res<Input<MouseButton>>, &query: Query<&CardBundle>) {
-    if buttons.just_pressed(MouseButton::Left) {
-        println!("asd");
-    }
+fn mouse_button_input(windows: Query<&Window>, mouse: Res<Input<MouseButton>>) {
+    if mouse.just_pressed(MouseButton::Left) {
+        if let Some(position) = windows.get_single().unwrap().cursor_position() {
+          info!("Mouse button pressed at: {:?}", position);
+        //   mouse.clear_just_pressed(MouseButton::Left); // <- New line here
+        }
+      }
 }
