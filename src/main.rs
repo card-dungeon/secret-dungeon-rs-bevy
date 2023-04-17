@@ -1,8 +1,11 @@
 use bevy::prelude::*;
+use bevy_rapier2d::prelude::*;
+use dotenv::dotenv;
 
 mod battle;
 mod card;
 mod config;
+mod controller;
 mod request;
 mod scene_main;
 mod states;
@@ -17,6 +20,8 @@ const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
 // const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
 
 fn main() {
+    dotenv().ok();
+
     App::new()
         .add_plugins(
             DefaultPlugins
@@ -36,9 +41,10 @@ fn main() {
         )
         // 앱이 상호작용을 안하고 있을 경우에 동작 X
         // .insert_resource(WinitSettings::desktop_app())
-        .add_plugin(card::CardPlugin)
         .add_state::<states::GameState>()
         .add_startup_system(setup)
+        .add_plugin(card::CardPlugin)
+        .add_plugin(controller::pc::PcControllerPlugin)
         .add_system(go_deck_editor.in_set(OnUpdate(states::GameState::MainMenu)))
         .add_system(delete_button.in_schedule(OnExit(states::GameState::MainMenu)))
         .run();

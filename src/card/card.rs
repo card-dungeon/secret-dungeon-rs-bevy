@@ -74,6 +74,9 @@ pub enum CampType {
     Ally,
 }
 
+#[derive(Component, Debug)]
+pub struct BoundBox(pub Vec2, pub Vec2);
+
 #[derive(Bundle)]
 pub struct CardBundle {
     pub card: Card,

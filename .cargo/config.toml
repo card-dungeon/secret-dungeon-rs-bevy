@@ -5,7 +5,10 @@
 
 [target.x86_64-unknown-linux-gnu]
 linker = "clang"
-rustflags = ["-Clink-arg=-fuse-ld=lld", "-Zshare-generics=y"]
+rustflags = [
+    "-Clink-arg=-fuse-ld=lld", 
+    # "-Zshare-generics=y"
+    ]
 
 # 참고: Mac에 [Mach-O LLD 포트](https://lld.llvm.org/MachO/index.html)를 설치해야 합니다. "brew" 패키지 관리자와 함께 lld를 포함하는 llvm을 설치하면 쉽게 이 작업을 수행할 수 있습니다.
 # `brew install llvm`
