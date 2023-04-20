@@ -1,39 +1,44 @@
 use bevy::prelude::*;
 
-#[derive(Component)]
+use crate::controller::pc::battle::BattleClickComponent;
+
+#[derive(Component, Default)]
 pub struct Card {
     pub card_id: u32,
     pub name: String,
     pub desc: String,
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub enum CardType {
+    #[default]
+    NONE,
     Character,
     Skill,
     Equip,
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Attack(pub u32);
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Shield(pub u32);
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Health(pub u32);
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Heal(pub u32);
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Speed(pub u32);
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub struct Cooldown(pub u32);
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub enum BehaviorType {
+    #[default]
     NONE,
     Attack,
     Heal,
@@ -42,8 +47,9 @@ pub enum BehaviorType {
     Debuff,
 }
 
-#[derive(Component, PartialEq)]
+#[derive(Component, PartialEq, Default)]
 pub enum Class {
+    #[default]
     NONE,
     Warrior,
     Mage,
@@ -56,28 +62,31 @@ pub enum Class {
     Warlock,
 }
 
-#[derive(Component)]
+#[derive(Component, Default)]
 pub enum Location {
+    #[default]
     NONE,
     Front,
     Back,
 }
 
-#[derive(Component)]
-pub struct Back;
-
-#[derive(Component)]
+#[derive(Component, Default)]
 pub enum CampType {
+    #[default]
     NONE,
     Player,
     Enemy,
     Ally,
 }
 
-#[derive(Component, Debug)]
-pub struct BoundBox(pub Vec2, pub Vec2);
+#[derive(Component, Default)]
+pub struct CardSet {
+    pub character: CardBundle,
+    pub skill: CardBundle,
+    pub equip: CardBundle,
+}
 
-#[derive(Bundle)]
+#[derive(Bundle, Default)]
 pub struct CardBundle {
     pub card: Card,
     pub card_type: CardType,
@@ -92,4 +101,12 @@ pub struct CardBundle {
     pub sprite: SpriteBundle,
     pub location: Location,
     pub camp_type: CampType,
+}
+
+pub fn toggle_card_set(mut query: Query<&BattleClickComponent>) {
+    for card in query.iter_mut() {
+        if card.is_clicked {
+            println!("toggle card set");
+        }
+    }
 }

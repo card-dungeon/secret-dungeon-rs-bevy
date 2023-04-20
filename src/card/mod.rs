@@ -1,3 +1,4 @@
+pub mod battle;
 pub mod card;
 pub mod convert;
 
@@ -28,7 +29,7 @@ pub struct CardPlugin;
 
 impl Plugin for CardPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup);
+        app.add_startup_system(setup).add_system(toggle_card_set);
     }
 }
 
@@ -47,10 +48,21 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .spawn(card_vec.pop().unwrap())
         .insert(BattleClickComponent {
             bounds: (
-                Vec2::new(0. - (CARD_WIDTH / 2.), 0. - (CARD_HEIGHT / 2.)),
-                Vec2::new(0. + (CARD_WIDTH / 2.), 0. + (CARD_HEIGHT / 2.)),
+                Vec2::new(500. - (CARD_WIDTH / 2.), 500. - (CARD_HEIGHT / 2.)),
+                Vec2::new(500. + (CARD_WIDTH / 2.), 500. + (CARD_HEIGHT / 2.)),
             ),
-            origin: Vec2::new(0., 0.),
+            origin: Vec2::new(500., 500.),
+            ..Default::default()
+        });
+    commands
+        .spawn(card_vec.pop().unwrap())
+        .insert(BattleClickComponent {
+            bounds: (
+                Vec2::new(300. - (CARD_WIDTH / 2.), 300. - (CARD_HEIGHT / 2.)),
+                Vec2::new(300. + (CARD_WIDTH / 2.), 300. + (CARD_HEIGHT / 2.)),
+            ),
+            origin: Vec2::new(300., 300.),
+            ..Default::default()
         });
     // }
 
@@ -80,7 +92,7 @@ fn convert_json_to_card(
             class: Class::NONE,
             sprite: SpriteBundle {
                 texture: asset_server.load(card.sprite),
-                transform: Transform::from_translation(Vec3::new(0., 0., 1.)),
+                transform: Transform::from_translation(Vec3::new(300., 300., 1.)),
                 visibility: Visibility::Visible,
                 ..default()
             },
@@ -89,5 +101,29 @@ fn convert_json_to_card(
             behavior_type: BehaviorType::NONE,
         });
     }
+    cards.push(CardBundle {
+        card: Card {
+            card_id: 0,
+            name: "test".to_string(),
+            desc: "test".to_string(),
+        },
+        card_type: CardType::Character,
+        attack: Attack(1),
+        shield: Shield(1),
+        health: Health(1),
+        heal: Heal(1),
+        speed: Speed(1),
+        cooldown: Cooldown(1),
+        class: Class::NONE,
+        sprite: SpriteBundle {
+            texture: asset_server.load("warrior_002.png"),
+            transform: Transform::from_translation(Vec3::new(500., 500., 1.)),
+            visibility: Visibility::Visible,
+            ..default()
+        },
+        location: Location::NONE,
+        camp_type: CampType::NONE,
+        behavior_type: BehaviorType::NONE,
+    });
     cards
 }
