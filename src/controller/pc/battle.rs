@@ -4,11 +4,12 @@ use bevy::{
     prelude::*,
 };
 
+use crate::collider::*;
+
 #[derive(Component, Default)]
-pub struct BattleClickComponent {
+pub struct BattleInputComponent {
     // cursor_position: ManualEventReader<CursorMoved>,
-    pub bounds: (Vec2, Vec2),
-    pub origin: Vec2,
+    pub hitbox: CardHitbox,
     pub is_clicked: bool,
     pub pressed_time: f32,
 }
@@ -26,7 +27,7 @@ impl Plugin for PcControllerBattlePlugin {
 fn setup() {}
 
 fn click_card(
-    mut query: Query<&mut BattleClickComponent>,
+    mut query: Query<&mut BattleInputComponent>,
     mut mouse: EventReader<MouseButtonInput>,
     windows: Query<&Window>,
 ) {
@@ -43,6 +44,7 @@ fn click_card(
                     if _is_mouse_over(cursor_position, &clickable) {
                         clickable.is_clicked = true;
                     } else {
+                        clickable.is_clicked = false;
                     }
                 }
             }
@@ -51,7 +53,7 @@ fn click_card(
 }
 
 fn mouse_over_card(
-    mut query: Query<(&mut BattleClickComponent, &mut Sprite)>,
+    mut query: Query<(&mut BattleInputComponent, &mut Sprite)>,
     windows: Query<&Window>,
 ) {
     let window = windows.get_single().unwrap();
@@ -72,7 +74,8 @@ fn mouse_over_card(
     }
 }
 
-fn _is_mouse_over(mouse_position: Vec2, clickable: &BattleClickComponent) -> bool {
-    (clickable.bounds.0.x..clickable.bounds.1.x).contains(&mouse_position.x)
-        && (clickable.bounds.0.y..clickable.bounds.1.y).contains(&mouse_position.y)
+fn _is_mouse_over(mouse_position: Vec2, interactable: &BattleInputComponent) -> bool {
+    (interactable.hitbox.bounds.0.x..interactable.hitbox.bounds.1.x).contains(&mouse_position.x)
+        && (interactable.hitbox.bounds.0.y..interactable.hitbox.bounds.1.y)
+            .contains(&mouse_position.y)
 }

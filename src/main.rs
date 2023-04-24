@@ -4,8 +4,10 @@ use dotenv::dotenv;
 
 mod battle;
 mod card;
+mod collider;
 mod config;
 mod controller;
+mod deck;
 mod request;
 mod scene_main;
 mod states;
@@ -45,6 +47,8 @@ fn main() {
         .add_startup_system(setup)
         .add_plugin(card::CardPlugin)
         .add_plugin(controller::pc::PcControllerPlugin)
+        .add_plugin(deck::DeckPlugin)
+        .add_plugin(collider::CardColliderPlugin)
         .add_system(go_deck_editor.in_set(OnUpdate(states::GameState::MainMenu)))
         .add_system(delete_button.in_schedule(OnExit(states::GameState::MainMenu)))
         .run();
@@ -123,3 +127,19 @@ fn go_deck_editor(
 fn delete_button(mut commands: Commands, menu_data: ResMut<MenuData>) {
     commands.entity(menu_data.button_entity).despawn_recursive();
 }
+
+// fn text_input(
+//     mut char_evr: EventReader<ReceivedCharacter>,
+//     keys: Res<Input<KeyCode>>,
+//     mut string: Local<String>,
+// ) {
+//     for ev in char_evr.iter() {
+//         println!("Got char: '{}'", ev.char);
+//         string.push(ev.char);
+//     }
+
+//     if keys.just_pressed(KeyCode::Return) {
+//         println!("Text input: {}", *string);
+//         string.clear();
+//     }
+// }

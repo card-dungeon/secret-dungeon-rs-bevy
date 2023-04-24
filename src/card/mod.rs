@@ -5,7 +5,9 @@ pub mod convert;
 use bevy::prelude::*;
 use serde::*;
 
+use crate::collider::*;
 use crate::controller::pc::battle::*;
+use crate::controller::pc::deck_editor::*;
 use crate::request;
 use card::*;
 
@@ -29,7 +31,8 @@ pub struct CardPlugin;
 
 impl Plugin for CardPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup).add_system(toggle_card_set);
+        app.add_startup_system(setup);
+        // .add_system(toggle_card_set);
     }
 }
 
@@ -44,27 +47,97 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     // let cards = commands.spawn_batch(card_vec);
 
     // for card in card_vec {
+    let card_1 = card_vec.pop().unwrap();
     commands
         .spawn(card_vec.pop().unwrap())
-        .insert(BattleClickComponent {
-            bounds: (
-                Vec2::new(500. - (CARD_WIDTH / 2.), 500. - (CARD_HEIGHT / 2.)),
-                Vec2::new(500. + (CARD_WIDTH / 2.), 500. + (CARD_HEIGHT / 2.)),
-            ),
-            origin: Vec2::new(500., 500.),
+        .insert(BattleInputComponent {
+            hitbox: CardHitbox {
+                bounds: (
+                    Vec2::new(
+                        card_1.sprite.transform.translation.x - (CARD_WIDTH / 2.),
+                        card_1.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
+                    ),
+                    Vec2::new(
+                        card_1.sprite.transform.translation.x + (CARD_WIDTH / 2.),
+                        card_1.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
+                    ),
+                ),
+                origin: Vec2::new(
+                    card_1.sprite.transform.translation.x,
+                    card_1.sprite.transform.translation.y,
+                ),
+                width: CARD_WIDTH,
+                height: CARD_HEIGHT,
+            },
+            ..Default::default()
+        })
+        .insert(DeckEditorInputComponent {
+            hitbox: CardHitbox {
+                bounds: (
+                    Vec2::new(
+                        card_1.sprite.transform.translation.x - (CARD_WIDTH / 2.),
+                        card_1.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
+                    ),
+                    Vec2::new(
+                        card_1.sprite.transform.translation.x + (CARD_WIDTH / 2.),
+                        card_1.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
+                    ),
+                ),
+                origin: Vec2::new(
+                    card_1.sprite.transform.translation.x,
+                    card_1.sprite.transform.translation.y,
+                ),
+                width: CARD_WIDTH,
+                height: CARD_HEIGHT,
+            },
             ..Default::default()
         });
+
+    let card_2 = card_vec.pop().unwrap();
     commands
         .spawn(card_vec.pop().unwrap())
-        .insert(BattleClickComponent {
-            bounds: (
-                Vec2::new(300. - (CARD_WIDTH / 2.), 300. - (CARD_HEIGHT / 2.)),
-                Vec2::new(300. + (CARD_WIDTH / 2.), 300. + (CARD_HEIGHT / 2.)),
-            ),
-            origin: Vec2::new(300., 300.),
+        .insert(BattleInputComponent {
+            hitbox: CardHitbox {
+                bounds: (
+                    Vec2::new(
+                        card_2.sprite.transform.translation.x - (CARD_WIDTH / 2.),
+                        card_2.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
+                    ),
+                    Vec2::new(
+                        card_2.sprite.transform.translation.x + (CARD_WIDTH / 2.),
+                        card_2.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
+                    ),
+                ),
+                origin: Vec2::new(
+                    card_2.sprite.transform.translation.x,
+                    card_2.sprite.transform.translation.y,
+                ),
+                width: CARD_WIDTH,
+                height: CARD_HEIGHT,
+            },
+            ..Default::default()
+        })
+        .insert(DeckEditorInputComponent {
+            hitbox: CardHitbox {
+                bounds: (
+                    Vec2::new(
+                        card_2.sprite.transform.translation.x - (CARD_WIDTH / 2.),
+                        card_2.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
+                    ),
+                    Vec2::new(
+                        card_2.sprite.transform.translation.x + (CARD_WIDTH / 2.),
+                        card_2.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
+                    ),
+                ),
+                origin: Vec2::new(
+                    card_2.sprite.transform.translation.x,
+                    card_2.sprite.transform.translation.y,
+                ),
+                width: CARD_WIDTH,
+                height: CARD_HEIGHT,
+            },
             ..Default::default()
         });
-    // }
 
     // commands.insert_resource(CardData { cards });
 }
@@ -72,17 +145,17 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
 fn convert_json_to_card(
     card_info: Vec<CardInfo>,
     asset_server: &Res<AssetServer>,
-) -> Vec<CardBundle> {
+) -> Vec<CharacterCardBundle> {
     let mut cards = Vec::new();
 
     for card in card_info {
-        cards.push(CardBundle {
+        cards.push(CharacterCardBundle {
             card: Card {
                 card_id: card.card_id,
                 name: card.name,
                 desc: card.desc,
             },
-            card_type: CardType::Character,
+            // card_type: CardType::Character,
             attack: Attack(card.atk),
             shield: Shield(card.sd),
             health: Health(card.hp),
@@ -101,13 +174,13 @@ fn convert_json_to_card(
             behavior_type: BehaviorType::NONE,
         });
     }
-    cards.push(CardBundle {
+    cards.push(CharacterCardBundle {
         card: Card {
             card_id: 0,
             name: "test".to_string(),
             desc: "test".to_string(),
         },
-        card_type: CardType::Character,
+        // card_type: CardType::Character,
         attack: Attack(1),
         shield: Shield(1),
         health: Health(1),

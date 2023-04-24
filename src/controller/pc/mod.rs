@@ -8,7 +8,8 @@ pub struct PcControllerPlugin;
 impl Plugin for PcControllerPlugin {
     fn build(&self, app: &mut App) {
         app.add_startup_system(setup)
-            .add_plugin(battle::PcControllerBattlePlugin);
+            .add_plugin(battle::PcControllerBattlePlugin)
+            .add_plugin(deck_editor::PcControllerDeckEditorPlugin);
     }
 }
 
