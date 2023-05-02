@@ -1,4 +1,3 @@
-use bevy::input::mouse::MouseButtonInput;
 use bevy::prelude::*;
 
 use crate::card::card::*;
@@ -6,7 +5,6 @@ use crate::collider::*;
 
 #[derive(Component, Default)]
 pub struct DeckEditorInputComponent {
-    pub hitbox: CardHitbox,
     pub is_dragging: bool,
 }
 
@@ -14,27 +12,25 @@ pub struct PcControllerDeckEditorPlugin;
 
 impl Plugin for PcControllerDeckEditorPlugin {
     fn build(&self, app: &mut App) {
-        app.add_startup_system(setup).add_system(drag_card);
+        app.add_startup_system(setup)
+            .add_system(drag_card)
+            .add_system(is_mouse_over);
     }
 }
 
 fn setup() {}
 
 fn drag_card(
-    mut query: Query<(&mut Card, &mut DeckEditorInputComponent, &mut Transform)>,
+    mut query: Query<(&mut Hitbox, &mut Transform), With<Card>>,
     buttons: Res<Input<MouseButton>>,
     windows: Query<&Window>,
 ) {
-    use bevy::input::ButtonState;
-    let window = windows.get_single().unwrap();
-
     if buttons.pressed(MouseButton::Left) {
-        for (mut _card, mut interactable, mut transform) in query.iter_mut() {
-            let cursor_position = window.cursor_position().unwrap();
+        for (mut hitbox, mut transform) in query.iter_mut() {
+            let cursor_position = windows.get_single().unwrap().cursor_position().unwrap();
 
-            if _is_mouse_over(&cursor_position, &interactable) {
-                interactable.is_dragging = true;
-                interactable.hitbox.origin = cursor_position;
+            if hitbox.on_mouse_over {
+                hitbox.origin = cursor_position;
                 transform.translation = Vec3::new(
                     cursor_position.x,
                     cursor_position.y,
@@ -45,8 +41,12 @@ fn drag_card(
     }
 }
 
-fn _is_mouse_over(mouse_position: &Vec2, interactable: &DeckEditorInputComponent) -> bool {
-    (interactable.hitbox.bounds.0.x..interactable.hitbox.bounds.1.x).contains(&mouse_position.x)
-        && (interactable.hitbox.bounds.0.y..interactable.hitbox.bounds.1.y)
-            .contains(&mouse_position.y)
+fn is_mouse_over(mut query: Query<(&Hitbox, &mut Sprite), With<Card>>) {
+    for (hitbox, mut sprite) in query.iter_mut() {
+        if hitbox.on_mouse_over {
+            sprite.color = Color::rgb(0.5, 0.5, 0.5);
+        } else {
+            sprite.color = Color::rgb(1., 1., 1.);
+        }
+    }
 }

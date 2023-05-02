@@ -1,3 +1,4 @@
+use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, LogDiagnosticsPlugin};
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 use dotenv::dotenv;
@@ -41,6 +42,9 @@ fn main() {
                     ..default()
                 }),
         )
+        // fps 체크
+        // .add_plugin(LogDiagnosticsPlugin::default())
+        // .add_plugin(FrameTimeDiagnosticsPlugin::default())
         // 앱이 상호작용을 안하고 있을 경우에 동작 X
         // .insert_resource(WinitSettings::desktop_app())
         .add_state::<states::GameState>()

@@ -50,92 +50,40 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     let card_1 = card_vec.pop().unwrap();
     commands
         .spawn(card_vec.pop().unwrap())
+        .insert(Hitbox {
+            bounds: (
+                Vec2::new(300. - (CARD_WIDTH / 2.), 300. - (CARD_HEIGHT / 2.)),
+                Vec2::new(300. + (CARD_WIDTH / 2.), 300. + (CARD_HEIGHT / 2.)),
+            ),
+            origin: Vec2::new(300., 300.),
+            width: CARD_WIDTH,
+            height: CARD_HEIGHT,
+            ..Default::default()
+        })
         .insert(BattleInputComponent {
-            hitbox: CardHitbox {
-                bounds: (
-                    Vec2::new(
-                        card_1.sprite.transform.translation.x - (CARD_WIDTH / 2.),
-                        card_1.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
-                    ),
-                    Vec2::new(
-                        card_1.sprite.transform.translation.x + (CARD_WIDTH / 2.),
-                        card_1.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
-                    ),
-                ),
-                origin: Vec2::new(
-                    card_1.sprite.transform.translation.x,
-                    card_1.sprite.transform.translation.y,
-                ),
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-            },
             ..Default::default()
         })
         .insert(DeckEditorInputComponent {
-            hitbox: CardHitbox {
-                bounds: (
-                    Vec2::new(
-                        card_1.sprite.transform.translation.x - (CARD_WIDTH / 2.),
-                        card_1.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
-                    ),
-                    Vec2::new(
-                        card_1.sprite.transform.translation.x + (CARD_WIDTH / 2.),
-                        card_1.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
-                    ),
-                ),
-                origin: Vec2::new(
-                    card_1.sprite.transform.translation.x,
-                    card_1.sprite.transform.translation.y,
-                ),
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-            },
             ..Default::default()
         });
 
     let card_2 = card_vec.pop().unwrap();
     commands
         .spawn(card_vec.pop().unwrap())
+        .insert(Hitbox {
+            bounds: (
+                Vec2::new(300. - (CARD_WIDTH / 2.), 300. - (CARD_HEIGHT / 2.)),
+                Vec2::new(300. + (CARD_WIDTH / 2.), 300. + (CARD_HEIGHT / 2.)),
+            ),
+            origin: Vec2::new(300., 300.),
+            width: CARD_WIDTH,
+            height: CARD_HEIGHT,
+            ..Default::default()
+        })
         .insert(BattleInputComponent {
-            hitbox: CardHitbox {
-                bounds: (
-                    Vec2::new(
-                        card_2.sprite.transform.translation.x - (CARD_WIDTH / 2.),
-                        card_2.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
-                    ),
-                    Vec2::new(
-                        card_2.sprite.transform.translation.x + (CARD_WIDTH / 2.),
-                        card_2.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
-                    ),
-                ),
-                origin: Vec2::new(
-                    card_2.sprite.transform.translation.x,
-                    card_2.sprite.transform.translation.y,
-                ),
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-            },
             ..Default::default()
         })
         .insert(DeckEditorInputComponent {
-            hitbox: CardHitbox {
-                bounds: (
-                    Vec2::new(
-                        card_2.sprite.transform.translation.x - (CARD_WIDTH / 2.),
-                        card_2.sprite.transform.translation.y - (CARD_HEIGHT / 2.),
-                    ),
-                    Vec2::new(
-                        card_2.sprite.transform.translation.x + (CARD_WIDTH / 2.),
-                        card_2.sprite.transform.translation.y + (CARD_HEIGHT / 2.),
-                    ),
-                ),
-                origin: Vec2::new(
-                    card_2.sprite.transform.translation.x,
-                    card_2.sprite.transform.translation.y,
-                ),
-                width: CARD_WIDTH,
-                height: CARD_HEIGHT,
-            },
             ..Default::default()
         });
 
