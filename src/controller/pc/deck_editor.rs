@@ -27,7 +27,11 @@ fn drag_card(
 ) {
     if buttons.pressed(MouseButton::Left) {
         for (mut hitbox, mut transform) in query.iter_mut() {
-            let cursor_position = windows.get_single().unwrap().cursor_position().unwrap();
+            let cursor_position = windows
+                .get_single()
+                .expect("can't get window")
+                .cursor_position()
+                .expect("can't get cursor position");
 
             if hitbox.on_mouse_over {
                 hitbox.origin = cursor_position;

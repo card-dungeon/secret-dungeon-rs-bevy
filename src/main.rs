@@ -52,7 +52,7 @@ fn main() {
         .add_plugin(card::CardPlugin)
         .add_plugin(controller::pc::PcControllerPlugin)
         .add_plugin(deck::DeckPlugin)
-        .add_plugin(collider::CardColliderPlugin)
+        .add_plugin(collider::ColliderPlugin)
         .add_system(go_deck_editor.in_set(OnUpdate(states::GameState::MainMenu)))
         .add_system(delete_button.in_schedule(OnExit(states::GameState::MainMenu)))
         .run();
