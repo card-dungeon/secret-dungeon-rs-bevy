@@ -7,11 +7,6 @@ pub struct Hitbox {
     pub width: f32,
     pub height: f32,
     pub on_mouse_over: bool,
-    pub is_clicked: bool,
-    pub is_dragging: bool,
-    pub is_dropped: bool,
-    pub click_timer: f32,
-    pub mouse_released: bool,
 }
 
 impl Default for Hitbox {
@@ -22,11 +17,6 @@ impl Default for Hitbox {
             width: 0.,
             height: 0.,
             on_mouse_over: false,
-            is_clicked: false,
-            is_dragging: false,
-            is_dropped: false,
-            click_timer: 0.,
-            mouse_released: false,
         }
     }
 }
@@ -39,9 +29,7 @@ impl Plugin for ColliderPlugin {
             .add_system(track_origin)
             .add_system(is_mouse_over)
             .add_system(track_transform)
-            .add_system(is_hit)
-            .add_system(is_click)
-            .add_system(click_timer);
+            .add_system(is_hit);
     }
 }
 
@@ -75,50 +63,6 @@ fn is_mouse_over(mut query: Query<&mut Hitbox>, windows: Query<&Window>) {
             hitbox.on_mouse_over = true;
         } else {
             hitbox.on_mouse_over = false;
-        }
-    }
-}
-
-fn is_click(mut query: Query<&mut Hitbox>, buttons: Res<Input<MouseButton>>) {
-    for mut hitbox in query.iter_mut() {
-        if hitbox.on_mouse_over && hitbox.mouse_released && hitbox.click_timer < 0.25 {
-            hitbox.is_clicked = true;
-        } else {
-            hitbox.is_clicked = false;
-        }
-    }
-}
-
-// fn is_dragging() {
-//     if buttons.pressed(MouseButton::Left) {
-//         for mut hitbox in query.iter_mut() {
-//             hitbox.click_timer += time.delta_seconds();
-//             if hitbox.on_mouse_over {
-//                 hitbox.is_clicked = true;
-//             } else {
-//                 hitbox.is_clicked = false;
-//             }
-//         }
-//     }
-// }
-
-fn is_dropped() {}
-
-fn click_timer(mut query: Query<&mut Hitbox>, buttons: Res<Input<MouseButton>>, time: Res<Time>) {
-    if buttons.pressed(MouseButton::Left) {
-        for mut hitbox in query.iter_mut() {
-            if hitbox.on_mouse_over {
-                hitbox.mouse_released = false;
-                hitbox.click_timer += time.delta_seconds();
-            }
-        }
-    }
-
-    if buttons.just_released(MouseButton::Left) {
-        for mut hitbox in query.iter_mut() {
-            if hitbox.on_mouse_over {
-                hitbox.mouse_released = true;
-            }
         }
     }
 }

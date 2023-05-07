@@ -3,6 +3,8 @@ use bevy::prelude::*;
 use crate::card::card::*;
 use crate::collider::*;
 
+use super::Mouse;
+
 #[derive(Component, Default)]
 pub struct DeckEditorInputComponent {
     pub is_dragging: bool,
@@ -22,6 +24,7 @@ fn setup() {}
 
 fn drag_card(
     mut query: Query<(&mut Hitbox, &mut Transform), With<Card>>,
+    mouse: Res<Mouse>,
     buttons: Res<Input<MouseButton>>,
     windows: Query<&Window>,
 ) {
@@ -33,7 +36,7 @@ fn drag_card(
                 .cursor_position()
                 .expect("can't get cursor position");
 
-            if hitbox.on_mouse_over {
+            if mouse.is_drag && hitbox.on_mouse_over {
                 hitbox.origin = cursor_position;
                 transform.translation = Vec3::new(
                     cursor_position.x,
